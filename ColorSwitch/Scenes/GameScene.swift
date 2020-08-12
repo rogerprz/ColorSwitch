@@ -10,7 +10,7 @@ import SpriteKit
 
 class GameScene: SKScene {
     
-    
+    var colorSwitch: SKSpriteNode!
     
     override func didMove(to view: SKView) {
         
