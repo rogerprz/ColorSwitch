@@ -36,7 +36,7 @@ class GameScene: SKScene {
     }
     
     func setupPhysics() {
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -2.5)
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: -1.8)
         physicsWorld.contactDelegate = self
     }
     
@@ -95,11 +95,12 @@ class GameScene: SKScene {
     }
     
     func gameOver() {
-        scoreLabel.text = """
-        Final Score
-        \(score)
-        Game Over
-        """
+        UserDefaults.standard.set(score, forKey: "RecentScore")
+        if score > UserDefaults.standard.integer(forKey: "Highscore"){
+            UserDefaults.standard.set(score, forKey: "Highscore")
+        }
+        let menuScene = MenuScene(size: view!.bounds.size)
+        view!.presentScene(menuScene)
     }
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -121,6 +122,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 SKSpriteNode : contact.bodyB.node as?
                 SKSpriteNode {
                     if currentColorIndex == switchState.rawValue {
+                        run(SKAction.playSoundFileNamed("bling", waitForCompletion: false))
                         score += 1
                         updateScoreLabel()
                         ball.run(SKAction.fadeOut(withDuration: 0.25), completion: {
