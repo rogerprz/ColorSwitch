@@ -29,6 +29,8 @@ class GameScene: SKScene {
     
     let scoreLabel = SKLabelNode(text: "0")
     var score = 0
+    var levelUpScore = 5
+    var currentPhysics = -1.0
     
     override func didMove(to view: SKView) {
         setupPhysics()
@@ -36,7 +38,7 @@ class GameScene: SKScene {
     }
     
     func setupPhysics() {
-        physicsWorld.gravity = CGVector(dx: 0.0, dy: -1.8)
+        physicsWorld.gravity = CGVector(dx: 0.0, dy: currentPhysics)
         physicsWorld.contactDelegate = self
     }
     
@@ -124,6 +126,15 @@ extension GameScene: SKPhysicsContactDelegate {
                     if currentColorIndex == switchState.rawValue {
                         run(SKAction.playSoundFileNamed("bling", waitForCompletion: false))
                         score += 1
+//                        print("SCORE: \(score), \(levelUpScore) | BEFORE_CURRENTPHYS: \(currentPhysics)")
+                        if levelUpScore == score {
+                            levelUpScore += 5
+                            currentPhysics -= 0.5
+                            print("CURRENTPHYS: \(currentPhysics)")
+                            physicsWorld.gravity = CGVector(dx: 0.0, dy: currentPhysics)
+                            physicsWorld.contactDelegate = self
+                            print("CURRENTPHYS: \(physicsWorld.gravity)")
+                        }
                         updateScoreLabel()
                         ball.run(SKAction.fadeOut(withDuration: 0.25), completion: {
                             ball.removeFromParent()
