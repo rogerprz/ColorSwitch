@@ -126,14 +126,10 @@ extension GameScene: SKPhysicsContactDelegate {
                     if currentColorIndex == switchState.rawValue {
                         run(SKAction.playSoundFileNamed("bling", waitForCompletion: false))
                         score += 1
-//                        print("SCORE: \(score), \(levelUpScore) | BEFORE_CURRENTPHYS: \(currentPhysics)")
                         if levelUpScore == score {
                             levelUpScore += 5
                             currentPhysics -= 0.5
-                            print("CURRENTPHYS: \(currentPhysics)")
                             physicsWorld.gravity = CGVector(dx: 0.0, dy: currentPhysics)
-                            physicsWorld.contactDelegate = self
-                            print("CURRENTPHYS: \(physicsWorld.gravity)")
                         }
                         updateScoreLabel()
                         ball.run(SKAction.fadeOut(withDuration: 0.25), completion: {
